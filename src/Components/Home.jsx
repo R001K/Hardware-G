@@ -1,6 +1,6 @@
 import React from "react";
-import mouseImage from "../assets/homeimg/mouse.jpg";
-import Keybord from "../assets/homeimg/Keybord.jpg"
+import mouseImage from "../assets/homeimg/mouse.jpg"
+import Keybord from "../assets/homeimg/keybord.jpg"
 import Microphone from "../assets/homeimg/Mic.jpg"
 import Mousepad from "../assets/homeimg/MPad.jpg"
 

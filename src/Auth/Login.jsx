@@ -25,7 +25,11 @@ const Login = () => {
       setError("Invalid email or password"); 
     }
   };
-
+  
+  //Redirect to the Register page
+  const handleSignup = () => {
+    navigate("/register"); 
+  };
   return (
     <div className="flex items-center justify-center h-screen" style={{ backgroundColor: "#0a2351" }}>
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
@@ -62,9 +66,16 @@ const Login = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition duration-200"
+            className="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-gray-600 transition duration-200"
           >
             Login
+          </button>
+          <button
+            type="submit" 
+            onClick={handleSignup} // Navigate to Register page
+            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-green-600 transition duration-200"
+          >
+            Signup
           </button>
         </form>
       </div>

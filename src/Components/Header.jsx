@@ -78,7 +78,7 @@ const Header = () => {
           >
             Catalog
             {isCatalogOpen && (
-              <ul className="absolute top-8 left-0 bg-white text-black rounded-lg shadow-lg p-4">
+              <ul className="absolute top-8 left-0 bg-white text-black rounded-lg shadow-lg p-4 z-50">
                 <li className="hover:bg-gray-200 p-2 rounded">Mouse</li>
                 <li className="hover:bg-gray-200 p-2 rounded">Keyboard</li>
                 <li className="hover:bg-gray-200 p-2 rounded">Mic</li>

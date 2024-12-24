@@ -47,7 +47,7 @@ const Header = () => {
           </div>
           {/* Cart Icon */}
           <NavLink
-          to="/Profile">
+          to="/Cart">
           <FaShoppingCart className="text-2xl cursor-pointer"
            onClick={() => setIsProfileOpen(!isProfileOpen)} />
           </NavLink>

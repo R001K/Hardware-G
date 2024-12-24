@@ -14,6 +14,13 @@ import Register from "./Auth/Register";
 import Profile from "./Auth/Profile";
 import PrivateRoute from "./Auth/PrivateRoute";
 import { AuthProvider } from "./utils/AuthContext";
+import ProductMouse from "./Components/Prouduct/ProductMouse";
+import ProductDetail from "./Components/Detail/ProductDetail";
+import ProductKeyboard from "./Components/Prouduct/ProductKeyboard";
+import ProductMic from "./Components/Prouduct/ProductMic";
+import ProductMousepad from "./Components/Prouduct/ProductMousepad";
+import Cart from "./Components/Cart";
+import { CartProvider } from "./utils/CartContext";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,6 +31,15 @@ const router = createBrowserRouter(
       <Route path="contact" element={<Contact />} />
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
+      <Route path="Product/Mouse" element={<ProductMouse />} />
+      <Route path="Product/Keyboard" element={<ProductKeyboard />} />
+      <Route path="Product/Mic" element={<ProductMic />} />
+      <Route path="Product/MousePad" element={<ProductMousepad />} />
+
+      <Route path="/product/:productId" element={<ProductDetail/>}/>
+
+      <Route path="Cart" element={<Cart/>}/>
+      
 
       {/* Protected Route for Profile */}
       <Route
@@ -41,7 +57,9 @@ const router = createBrowserRouter(
 const App = () => {
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
+      <CartProvider>
+        <RouterProvider router={router} />
+      </CartProvider>
     </AuthProvider>
   );
 };

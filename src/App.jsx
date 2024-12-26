@@ -21,6 +21,7 @@ import ProductMic from "./Components/Prouduct/ProductMic";
 import ProductMousepad from "./Components/Prouduct/ProductMousepad";
 import Cart from "./Components/Cart";
 import { CartProvider } from "./utils/CartContext";
+import ErrorPage from "./Components/Error";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -50,6 +51,8 @@ const router = createBrowserRouter(
           </PrivateRoute>
         }
       />
+       {/* Catch-All Route for Errors */}
+       <Route path="*" element={<ErrorPage />} />
     </Route>
   )
 );

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
-import { Client, Databases, Query } from "appwrite";
+import { Client, Databases } from "appwrite";
 import AuthContext from "../../utils/AuthContext";
 
 // Initialize Appwrite Client
@@ -8,10 +8,11 @@ const client = new Client();
 client.setEndpoint("https://cloud.appwrite.io/v1").setProject("6746052c001ebc1e13ec");
 const databases = new Databases(client);
 
-const ProductDetail = () => {
+const KeyboardDetail = () => {
   const { productId } = useParams(); // Get product ID from the URL
   const [product, setProduct] = useState(null);
   const [isInCart, setIsInCart] = useState(false);
+  const [cartItems, setCartItems] = useState([]); // State to hold cart items
 
   const { user, loading } = useContext(AuthContext); // Access AuthContext
 
@@ -21,42 +22,29 @@ const ProductDetail = () => {
       try {
         const response = await databases.getDocument(
           "675bcd71002a456f4295", // Database ID
-          "675bd372002cc4d01082", // Collection ID
+          "676ac9f00010813e0b96", // Collection ID (for keyboards)
           productId // Document (Product) ID
         );
         setProduct(response);
 
         // Check if product is already in the cart
-        if (user) {
-          const cartCheck = await databases.listDocuments(
-            "675bcd71002a456f4295", // Replace with your cart database ID
-            "676e4a63000efb5da228", // Replace with your cart collection ID
-            [
-              Query.equal("userId", user.$id),
-              Query.equal("productId", productId)
-            ]
-          );
-
-          setIsInCart(cartCheck.documents.length > 0);
-        }
+        setIsInCart(cartItems.some((item) => item.productId === response.productId));
       } catch (error) {
-        console.error("Error fetching product or cart check:", error.message);
+        console.error("Error fetching product:", error.message);
       }
     };
 
-    if (!loading) fetchProduct();
-  }, [productId, user, loading]);
+    fetchProduct();
+  }, [productId, cartItems]); // cartItems will only cause re-fetch when added/removed
 
-  const addToCart = async () => {
-    if (!user) return;
-
+  const addToCart = async (userId, productId, collectionId) => {
     const cartItem = {
-      userId: user.$id,
-      productId: product.$id,
-      collectionId: "675bd372002cc4d01082",
+      userId: userId,
+      productId: productId,
+      collectionId: "676ac9f00010813e0b96",
       quantity: 1, // Default quantity
     };
-
+  
     try {
       const response = await databases.createDocument(
         "675bcd71002a456f4295", // Replace with your cart database ID
@@ -65,45 +53,39 @@ const ProductDetail = () => {
         cartItem
       );
       console.log("Item added to cart:", response);
-      setIsInCart(true);
     } catch (error) {
       console.error("Error adding to cart:", error.message);
     }
   };
-
-  const removeFromCart = async () => {
-    if (!user) return;
-
-    try {
-      const cartResponse = await databases.listDocuments(
-        "675bcd71002a456f4295", // Replace with your cart database ID
-        "676e4a63000efb5da228", // Replace with your cart collection ID
-        [
-          Query.equal("userId", user.$id),
-          Query.equal("productId", product.$id)
-        ]
-      );
-
-      if (cartResponse.documents.length > 0) {
-        await databases.deleteDocument(
-          "675bcd71002a456f4295",
-          "676e4a63000efb5da228",
-          cartResponse.documents[0].$id
-        );
-        setIsInCart(false);
-      }
-    } catch (error) {
-      console.error("Error removing from cart:", error.message);
-    }
-  };
-
+  
   const handleCartToggle = async () => {
+    if (!user) return;
+  
     if (isInCart) {
-      await removeFromCart();
+      try {
+        const cartResponse = await databases.listDocuments(
+          "675bcd71002a456f4295", // Replace with your cart database ID
+          "676e4a63000efb5da228", // Replace with your cart collection ID
+          [`userId=${user.$id}`, `productId=${product.productId}`]
+        );
+  
+        if (cartResponse.documents.length > 0) {
+          await databases.deleteDocument(
+            "675bcd71002a456f4295",
+            "676e4a63000efb5da228",
+            cartResponse.documents[0].$id
+          );
+        }
+      } catch (error) {
+        console.error("Error removing item from cart:", error.message);
+      }
+      setIsInCart(false);
     } else {
-      await addToCart();
+      await addToCart(user.$id, product.productId, "676e4a63000efb5da228"); // Call addToCart
+      setIsInCart(true);
     }
   };
+  
 
   if (!product || loading) return <div>Loading...</div>;
 
@@ -174,20 +156,20 @@ const ProductDetail = () => {
 
           {/* Buttons at the Bottom */}
           <div className="mt-auto flex gap-4">
-            <button
-              onClick={user ? handleCartToggle : undefined}
-              disabled={!user}
-              className={`px-6 py-3 rounded-md text-lg focus:outline-none transition ${
-                user
-                  ? isInCart
-                    ? "bg-red-600 hover:bg-red-700 text-white"
-                    : "bg-blue-600 hover:bg-blue-700 text-white"
-                  : "bg-gray-400 cursor-not-allowed"
-              }`}
-            >
-              {isInCart ? "Remove from Cart" : "Add to Cart"}
-            </button>
-
+          <button
+          onClick={user ? handleCartToggle : undefined}
+          disabled={!user}
+          className={`px-6 py-3 rounded-md text-lg focus:outline-none transition ${
+            user
+              ? isInCart
+                ? "bg-red-600 hover:bg-red-700 text-white"
+                : "bg-blue-600 hover:bg-blue-700 text-white"
+              : "bg-gray-400 cursor-not-allowed"
+          }`}
+        >
+          {isInCart ? "Remove from Cart" : "Add to Cart"}
+        </button>
+        
             <button
               disabled={!user}
               className={`px-6 py-3 rounded-md text-lg focus:outline-none transition ${
@@ -208,4 +190,4 @@ const ProductDetail = () => {
   );
 };
 
-export default ProductDetail;
+export default KeyboardDetail;

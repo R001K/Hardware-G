@@ -19,8 +19,10 @@ const Home = () => {
   const cards = [
     { id: 1, img: mouseImage, text: "Mouse", Navi: "/Product/Mouse" },
     { id: 2, img: Keybord, text: "Keyboard", Navi: "/Product/Keyboard" },
-    { id: 3, img: Microphone, text: "Mic", Navi: "/Product/Mic" },
-    { id: 4, img: Mousepad, text: "Mousepad", Navi: "/Product/MousePad" },
+    { id: 3, img: Microphone, text: "Case", Navi: "/Product/Case" },
+    { id: 4, img: Mousepad, text: "Monitor", Navi: "/Product/Monitor" },
+    { id: 5, img: Mousepad, text: "VideoCard", Navi: "/Product/VideoCard" },
+    { id: 6, img: Mousepad, text: "Headphones", Navi: "/Product/Headphones" },
   ];  
 
   return (

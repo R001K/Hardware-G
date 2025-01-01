@@ -8,7 +8,7 @@ const client = new Client();
 client.setEndpoint("https://cloud.appwrite.io/v1").setProject("6746052c001ebc1e13ec");
 const databases = new Databases(client);
 
-const ProductDetail = () => {
+const VideoCardDetail = () => {
   const { productId } = useParams(); // Get product ID from the URL
   const [product, setProduct] = useState(null);
   const [isInCart, setIsInCart] = useState(false);
@@ -21,7 +21,7 @@ const ProductDetail = () => {
       try {
         const response = await databases.getDocument(
           "675bcd71002a456f4295", // Database ID
-          "675bd372002cc4d01082", // Collection ID
+          "676e7d93002f49c298bd", // Collection ID
           productId // Document (Product) ID
         );
         setProduct(response);
@@ -53,7 +53,7 @@ const ProductDetail = () => {
     const cartItem = {
       userId: user.$id,
       productId: product.$id,
-      collectionId: "675bd372002cc4d01082",
+      collectionId: "676e7d93002f49c298bd",
       quantity: 1, // Default quantity
     };
 
@@ -110,11 +110,12 @@ const ProductDetail = () => {
   const {
     name = "Default Name",
     price = "0.00",
-    switches = "Unknown",
-    style = "Default Style",
-    backlit = "No",
-    connection_type = "Wired",
-    color = "Black",
+    chipset = "N/A",
+    memory = "N/A",
+    core_clock = "N/A",
+    color = "Default Color",
+    productId: productCode = "N/A",
+    imgUrl = "https://via.placeholder.com/600",
   } = product;
 
   return (
@@ -123,7 +124,7 @@ const ProductDetail = () => {
         {/* Product Image */}
         <div className="w-full md:w-1/2">
           <img
-            src={product?.imageId || "https://via.placeholder.com/600"} // Display imageId if available
+            src={imgUrl} // Display imgUrl if available
             alt={name}
             className="w-full h-full object-cover rounded-lg shadow-lg"
           />
@@ -149,24 +150,28 @@ const ProductDetail = () => {
                   <td className="px-4 py-2">{name}</td>
                 </tr>
                 <tr>
-                  <td className="px-4 py-2 font-semibold">Switches</td>
-                  <td className="px-4 py-2">{switches}</td>
+                  <td className="px-4 py-2 font-semibold">Price</td>
+                  <td className="px-4 py-2">{price}</td>
                 </tr>
                 <tr>
-                  <td className="px-4 py-2 font-semibold">Style</td>
-                  <td className="px-4 py-2">{style}</td>
+                  <td className="px-4 py-2 font-semibold">Chipset</td>
+                  <td className="px-4 py-2">{chipset}</td>
                 </tr>
                 <tr>
-                  <td className="px-4 py-2 font-semibold">Backlit</td>
-                  <td className="px-4 py-2">{backlit}</td>
+                  <td className="px-4 py-2 font-semibold">Memory</td>
+                  <td className="px-4 py-2">{memory}</td>
                 </tr>
                 <tr>
-                  <td className="px-4 py-2 font-semibold">Connection Type</td>
-                  <td className="px-4 py-2">{connection_type}</td>
+                  <td className="px-4 py-2 font-semibold">Core Clock</td>
+                  <td className="px-4 py-2">{core_clock}</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-2 font-semibold">Color</td>
                   <td className="px-4 py-2">{color}</td>
+                </tr>
+                <tr>
+                  <td className="px-4 py-2 font-semibold">Product ID</td>
+                  <td className="px-4 py-2">{productCode}</td>
                 </tr>
               </tbody>
             </table>
@@ -208,4 +213,4 @@ const ProductDetail = () => {
   );
 };
 
-export default ProductDetail;
+export default VideoCardDetail;

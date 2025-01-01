@@ -18,16 +18,35 @@ const databases = new Databases(client);
 
 // IDs for database and collection
 const databaseId = "675bcd71002a456f4295"; // Replace with your database ID
-const collectionId = "675bd372002cc4d01082"; // Replace with your collection ID
+const collectionId = "676ea87800378cc1b17b"; // Replace with your collection ID
 
 // Path to JSON file
-const jsonFilePath = path.join(__dirname, "../assets/Database/mouse.json");
+const jsonFilePath = path.join(__dirname, "../assets/Database/headphones.json");
 const products = JSON.parse(fs.readFileSync(jsonFilePath, "utf8")); // Parse JSON file
+
+// Starting value for productId
+let productIdCounter = 7000;
 
 // Async function to upload data
 (async () => {
-  for (const product of products) {
+  const productsToUpload = products.slice(0, 20); // Only upload the first 30 products
+  
+  for (const product of productsToUpload) {
     try {
+      // Add productId to product data
+      product.productId = String(productIdCounter);
+      product.price = String(product.price);
+      product.microphone = String(product.microphone);
+      product.wireless = String(product.wireless);
+
+
+      // Remove unwanted fields (for example: `color`, `price`)
+      delete product.frequency_response; // Ignore price
+       delete product.enclosure_type;
+
+      // Increment the productId counter for the next product
+      productIdCounter++;
+
       const response = await databases.createDocument(
         databaseId,
         collectionId,

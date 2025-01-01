@@ -17,10 +17,18 @@ import { AuthProvider } from "./utils/AuthContext";
 import ProductMouse from "./Components/Prouduct/ProductMouse";
 import ProductDetail from "./Components/Detail/ProductDetail";
 import ProductKeyboard from "./Components/Prouduct/ProductKeyboard";
-import ProductMic from "./Components/Prouduct/ProductMic";
-import ProductMousepad from "./Components/Prouduct/ProductMousepad";
+import ProductCase from "./Components/Prouduct/ProductCase";
+import ProductMousepad from "./Components/Prouduct/ProductMonitor";
 import Cart from "./Components/Cart";
 import { CartProvider } from "./utils/CartContext";
+import KeyboardDetail from "./Components/Detail/KeyboardDetail";
+import CaseDetail from "./Components/Detail/CaseDetail";
+import ProductMonitor from "./Components/Prouduct/ProductMonitor";
+import MonitorDetail from "./Components/Detail/MonitorDetail";
+import ProductVideocard from "./Components/Prouduct/ProductVideocard";
+import VideoCardDetail from "./Components/Detail/VideoCardDetail";
+import ProductHeadpone from "./Components/Prouduct/ProductHeadpone";
+import HeadphoneDetail from "./Components/Detail/HeadphoneDetail";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -33,10 +41,19 @@ const router = createBrowserRouter(
       <Route path="register" element={<Register />} />
       <Route path="Product/Mouse" element={<ProductMouse />} />
       <Route path="Product/Keyboard" element={<ProductKeyboard />} />
-      <Route path="Product/Mic" element={<ProductMic />} />
-      <Route path="Product/MousePad" element={<ProductMousepad />} />
+      <Route path="Product/Case" element={<ProductCase />} />
+      <Route path="Product/Monitor" element={<ProductMonitor />} />
+      <Route path="Product/VideoCard" element={<ProductVideocard />} />
+      <Route path="/Product/Headphones" element={<ProductHeadpone />} />
 
       <Route path="/product/:productId" element={<ProductDetail/>}/>
+      <Route path="/KeyBord/:productId" element={<KeyboardDetail/>}/>
+      <Route path="/case/:productId" element={<CaseDetail/>}/>
+      <Route path="/Monitor/:productId" element={<MonitorDetail/>}/>
+      <Route path="/VideoCard/:productId" element={<VideoCardDetail/>}/>
+      <Route path="/Headphones/:productId" element={<HeadphoneDetail/>}/>
+
+      
 
       <Route path="Cart" element={<Cart/>}/>
       

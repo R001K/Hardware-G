@@ -56,7 +56,7 @@ const Login = () => {
             </label>
             <input
               type="password"
-              id="password"
+              autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
@@ -73,7 +73,7 @@ const Login = () => {
           <button
             type="submit" 
             onClick={handleSignup} // Navigate to Register page
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-green-600 transition duration-200"
+            className="w-full bg-blue-600 text-white py-2 my-2 rounded-lg hover:bg-green-600 transition duration-200"
           >
             Signup
           </button>

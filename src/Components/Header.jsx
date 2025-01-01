@@ -1,51 +1,23 @@
-import React, { useState, useRef } from "react";
-import { useNavigate, NavLink } from "react-router-dom";
+import React, { useState } from "react";
 import { FaSearch, FaUserCircle, FaShoppingCart } from "react-icons/fa";
+import { NavLink } from "react-router-dom"; // 
 
 const Header = () => {
-  const [isCatalogOpen, setIsCatalogOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const timeoutRef = useRef(null);
-  const navigate = useNavigate();
-
-  const handleMouseEnter = () => {
-    clearTimeout(timeoutRef.current); // Clear any existing timeout
-    setIsCatalogOpen(true);
-  };
-
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setIsCatalogOpen(false); // Close dropdown after a small delay
-    }, 200); // Adjust delay (in milliseconds) as needed
-  };
-
-  const navigateMouseProductDetailsPage = () => {
-    navigate("/Product/Mouse"); // Navigate to the Mouse page
-  };
-
-  const navigateKeyboardProductDetailsPage = () => {
-    navigate("/Product/Keyboard"); // Navigate to the Keyboard page
-  };
-
-  const navigateMicProductDetailsPage = () => {
-    navigate("Product/Mic"); // Navigate to the Mic page
-  };
-
-  const navigateMousePadProductDetailsPage = () => {
-    navigate("Product/MousePad"); // Navigate to the MousePad page
-  };
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isCatalogOpen, setIsCatalogOpen] = useState(false);
 
   return (
     <header className="w-full bg-[#0a2351] text-white">
       {/* Top Header */}
       <div className="flex items-center justify-between px-6 py-4">
-        {/* Left: Logo */}
+        {/* Left: Logo and Text */}
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-white"></div>
           <span className="text-xl font-bold">HardwareG</span>
         </div>
 
-        {/* Middle: Search */}
+        {/* Middle: Search Bar */}
         <div className="relative">
           <FaSearch
             className="text-xl cursor-pointer"
@@ -62,12 +34,24 @@ const Header = () => {
 
         {/* Right: Profile and Cart */}
         <div className="flex items-center gap-4">
-          <NavLink to="/Profile">
-            <FaUserCircle className="text-2xl cursor-pointer" />
+          {/* Profile Icon */}
+          <div className="relative">
+            <NavLink 
+            to="/Profile" >
+            <FaUserCircle
+              className="text-2xl cursor-pointer"
+              onClick={() => setIsProfileOpen(!isProfileOpen)}
+            />
+            </NavLink>
+
+          </div>
+          {/* Cart Icon */}
+          <NavLink
+          to="/Cart">
+          <FaShoppingCart className="text-2xl cursor-pointer"
+           onClick={() => setIsProfileOpen(!isProfileOpen)} />
           </NavLink>
-          <NavLink to="/Cart">
-            <FaShoppingCart className="text-2xl cursor-pointer" />
-          </NavLink>
+          
         </div>
       </div>
 
@@ -89,48 +73,17 @@ const Header = () => {
           {/* Catalog Link with Dropdown */}
           <li
             className="relative cursor-pointer hover:text-white"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
+            onMouseEnter={() => setIsCatalogOpen(true)}
+            onMouseLeave={() => setIsCatalogOpen(false)}
           >
             Catalog
             {isCatalogOpen && (
-              <ul
-                className="absolute top-8 left-0 bg-white text-black rounded-lg shadow-lg p-4 z-50"
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-              >
-                <li>
-                  <button
-                    onClick={navigateMouseProductDetailsPage}
-                    className="hover:bg-yellow-200 p-2 rounded w-full text-left"
-                  >
-                    Mouse
-                  </button>
-                </li>
-                <li> 
-                <button
-                 onClick={navigateKeyboardProductDetailsPage}
-                className="hover:bg-yellow-200 p-2 rounded"
-                >
-                  Keyboard
-                </button>
-                </li>
-                <li>
-                <button 
-                onClick={navigateMicProductDetailsPage}
-                className="hover:bg-yellow-200 p-2 rounded"
-                  >
-                  Mic
-                </button>
-                </li>          
-                <li>
-                  <button 
-                  onClick={navigateMousePadProductDetailsPage}
-                  className ="hover:bg-yellow-200 p-2 rounded"
-                  >
-                  Mousepad
-                  </button>
-                </li>
+              <ul className="absolute top-8 left-0 bg-white text-black rounded-lg shadow-lg p-4 z-50">
+                <li className="hover:bg-gray-200 p-2 rounded">Mouse</li>
+                <li className="hover:bg-gray-200 p-2 rounded">Keyboard</li>
+                <li className="hover:bg-gray-200 p-2 rounded">Mic</li>
+                <li className="hover:bg-gray-200 p-2 rounded">Mousepad</li>
+                <li className="hover:bg-gray-200 p-2 rounded">IEM</li>
               </ul>
             )}
           </li>

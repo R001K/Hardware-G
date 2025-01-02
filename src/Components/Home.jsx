@@ -2,8 +2,10 @@ import React from "react";
 // <<<<<<< Updated upstream
 import mouseImage from "../assets/homeimg/mouse.jpg"
 import Keybord from "../assets/homeimg/keybord.jpg"
-import Microphone from "../assets/homeimg/Mic.jpg"
-import Mousepad from "../assets/homeimg/MPad.jpg"
+import MONITOR from "../assets/homeimg/monitor.jpg"
+import CASE from "../assets/homeimg/case.jpg"
+import HEADPHONE from "../assets/homeimg/hp.jpg"
+import GPU from "../assets/homeimg/gpu.jpg"
 
 
 
@@ -19,10 +21,10 @@ const Home = () => {
   const cards = [
     { id: 1, img: mouseImage, text: "Mouse", Navi: "/Product/Mouse" },
     { id: 2, img: Keybord, text: "Keyboard", Navi: "/Product/Keyboard" },
-    { id: 3, img: Microphone, text: "Case", Navi: "/Product/Case" },
-    { id: 4, img: Mousepad, text: "Monitor", Navi: "/Product/Monitor" },
-    { id: 5, img: Mousepad, text: "VideoCard", Navi: "/Product/VideoCard" },
-    { id: 6, img: Mousepad, text: "Headphones", Navi: "/Product/Headphones" },
+    { id: 3, img: CASE, text: "Case", Navi: "/Product/Case" },
+    { id: 4, img: MONITOR, text: "Monitor", Navi: "/Product/Monitor" },
+    { id: 5, img: GPU, text: "VideoCard", Navi: "/Product/VideoCard" },
+    { id: 6, img: HEADPHONE, text: "Headphones", Navi: "/Product/Headphones" },
   ];  
 
   return (

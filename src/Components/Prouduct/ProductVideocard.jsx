@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 
 const client = new Client();
-client.setEndpoint("https://cloud.appwrite.io/v1").setProject("6746052c001ebc1e13ec");
+client.setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT).setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID);
 
 const databases = new Databases(client);
 
@@ -15,8 +15,8 @@ const ProductVideocard = () => {
     const fetchCases = async () => {
       try {
         const response = await databases.listDocuments(
-          "675bcd71002a456f4295", // Database ID
-          "676e7d93002f49c298bd"
+          import.meta.env.VITE_DATABASE_ID, // Database ID
+          import.meta.env.VITE_GPU_COLLECTION_ID
         );
         setCases(response.documents);
       } catch (error) {

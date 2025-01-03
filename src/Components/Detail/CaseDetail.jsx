@@ -3,9 +3,11 @@ import { useParams } from "react-router-dom";
 import { Client, Databases, Query } from "appwrite";
 import AuthContext from "../../utils/AuthContext";
 
+
+
 // Initialize Appwrite Client
 const client = new Client();
-client.setEndpoint("https://cloud.appwrite.io/v1").setProject("6746052c001ebc1e13ec");
+client.setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT).setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID);
 const databases = new Databases(client);
 
 const CaseDetail = () => {
@@ -20,8 +22,8 @@ const CaseDetail = () => {
     const fetchProduct = async () => {
       try {
         const response = await databases.getDocument(
-          "675bcd71002a456f4295", // Database ID
-          "676e7eff00240de2a059", // Collection ID
+          import.meta.env.VITE_DATABASE_ID, // Database ID
+          import.meta.env.VITE_CASE_COLLECTION_ID, // Collection ID
           productId // Document (Product) ID
         );
         setProduct(response);
@@ -29,7 +31,7 @@ const CaseDetail = () => {
         // Check if product is already in the cart
         if (user) {
           const cartCheck = await databases.listDocuments(
-            "675bcd71002a456f4295", // Replace with your cart database ID
+            import.meta.env.VITE_DATABASE_ID, // Replace with your cart database ID
             "676e4a63000efb5da228", // Replace with your cart collection ID
             [
               Query.equal("userId", user.$id),
@@ -53,13 +55,13 @@ const CaseDetail = () => {
     const cartItem = {
       userId: user.$id,
       productId: product.$id,
-      collectionId: "676e7eff00240de2a059",
+      collectionId: import.meta.env.VITE_CASE_COLLECTION_ID,
       quantity: 1, // Default quantity
     };
 
     try {
       const response = await databases.createDocument(
-        "675bcd71002a456f4295", // Replace with your cart database ID
+        import.meta.env.VITE_DATABASE_ID, // Replace with your cart database ID
         "676e4a63000efb5da228", // Replace with your cart collection ID
         "unique()", // Let Appwrite generate a unique ID
         cartItem
@@ -76,7 +78,7 @@ const CaseDetail = () => {
 
     try {
       const cartResponse = await databases.listDocuments(
-        "675bcd71002a456f4295", // Replace with your cart database ID
+        import.meta.env.VITE_DATABASE_ID, // Replace with your cart database ID
         "676e4a63000efb5da228", // Replace with your cart collection ID
         [
           Query.equal("userId", user.$id),
@@ -86,7 +88,7 @@ const CaseDetail = () => {
 
       if (cartResponse.documents.length > 0) {
         await databases.deleteDocument(
-          "675bcd71002a456f4295",
+          import.meta.env.VITE_DATABASE_ID,
           "676e4a63000efb5da228",
           cartResponse.documents[0].$id
         );

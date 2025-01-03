@@ -6,11 +6,11 @@ const databases = new Databases(client);
 
 // Set client configurations
 client
-  .setEndpoint('https://cloud.appwrite.io/v1')  // Appwrite endpoint
-  .setProject('6746052c001ebc1e13ec');          // Your Appwrite Project ID
+  .setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT)  // Appwrite endpoint
+  .setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID);          // Your Appwrite Project ID
 
 // Set the API key in headers correctly
-client.headers['X-Appwrite-Key'] = 'standard_5cea37ca3b59bf363c186eb5b8beca2977979e6cbf30efd9f8a92da460bd7f54c2710784aac5593e9e8da773824edd748b764d1706476c04ed93a7f6ee10cd4fb6dbcc1818eda8740180906dc85c5f1051f15be5f6167a565da31ea4784c43f27ab1ee8f9cebe6223141e68aad0a48857b6b2dac6b5648e6e3b35a3fabadfcc7'; // Your API Key
+client.headers['X-Appwrite-Key'] = import.meta.env.VITE_APPWRITE_API_KEY
 
 // Function to bulk delete documents with pagination
 const bulkDeleteDocuments = async (databaseId, collectionId) => {
@@ -43,8 +43,8 @@ const bulkDeleteDocuments = async (databaseId, collectionId) => {
 };
 
 // Replace these placeholders with your database and collection IDs
-const DATABASE_ID = '675bcd71002a456f4295';  // Your Database ID
-const COLLECTION_ID = '675bd372002cc4d01082'; // Your Collection ID
+const DATABASE_ID = import.meta.env.VITE_DATABASE_ID;  // Your Database ID
+const COLLECTION_ID = import.meta.env.VITE_MOUSE_COLLECTION_ID; // Your Collection ID
 
 // Call the function to delete all documents
 bulkDeleteDocuments(DATABASE_ID, COLLECTION_ID);

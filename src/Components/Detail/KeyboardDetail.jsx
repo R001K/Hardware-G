@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
-import { Client, Databases } from "appwrite";
+import { Client, Databases,Query } from "appwrite";
 import AuthContext from "../../utils/AuthContext";
 
 // Initialize Appwrite Client
 const client = new Client();
-client.setEndpoint("https://cloud.appwrite.io/v1").setProject("6746052c001ebc1e13ec");
+client.setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT).setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID);
 const databases = new Databases(client);
 
 const KeyboardDetail = () => {
@@ -16,76 +16,95 @@ const KeyboardDetail = () => {
 
   const { user, loading } = useContext(AuthContext); // Access AuthContext
 
-  // Fetch product details and check if it's already in the cart
+ // Fetch product details and check if it's already in the cart
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await databases.getDocument(
-          "675bcd71002a456f4295", // Database ID
-          "676ac9f00010813e0b96", // Collection ID (for keyboards)
+          import.meta.env.VITE_DATABASE_ID, // Database ID
+          import.meta.env.VITE_KEYBOARD_COLLECTION_ID, // Collection ID
           productId // Document (Product) ID
         );
         setProduct(response);
 
         // Check if product is already in the cart
-        setIsInCart(cartItems.some((item) => item.productId === response.productId));
+        if (user) {
+          const cartCheck = await databases.listDocuments(
+            import.meta.env.VITE_DATABASE_ID, // Replace with your cart database ID
+            "676e4a63000efb5da228", // Replace with your cart collection ID
+            [
+              Query.equal("userId", user.$id),
+              Query.equal("productId", productId)
+            ]
+          );
+
+          setIsInCart(cartCheck.documents.length > 0);
+        }
       } catch (error) {
-        console.error("Error fetching product:", error.message);
+        console.error("Error fetching product or cart check:", error.message);
       }
     };
 
-    fetchProduct();
-  }, [productId, cartItems]); // cartItems will only cause re-fetch when added/removed
+    if (!loading) fetchProduct();
+  }, [productId, user, loading]);
 
-  const addToCart = async (userId, productId, collectionId) => {
+  const addToCart = async () => {
+    if (!user) return;
+
     const cartItem = {
-      userId: userId,
-      productId: productId,
-      collectionId: "676ac9f00010813e0b96",
+      userId: user.$id,
+      productId: product.$id,
+      collectionId: import.meta.env.VITE_KEYBOARD_COLLECTION_ID,
       quantity: 1, // Default quantity
     };
-  
+
     try {
       const response = await databases.createDocument(
-        "675bcd71002a456f4295", // Replace with your cart database ID
+        import.meta.env.VITE_DATABASE_ID, // Replace with your cart database ID
         "676e4a63000efb5da228", // Replace with your cart collection ID
         "unique()", // Let Appwrite generate a unique ID
         cartItem
       );
       console.log("Item added to cart:", response);
+      setIsInCart(true);
     } catch (error) {
       console.error("Error adding to cart:", error.message);
     }
   };
-  
-  const handleCartToggle = async () => {
+
+  const removeFromCart = async () => {
     if (!user) return;
-  
-    if (isInCart) {
-      try {
-        const cartResponse = await databases.listDocuments(
-          "675bcd71002a456f4295", // Replace with your cart database ID
-          "676e4a63000efb5da228", // Replace with your cart collection ID
-          [`userId=${user.$id}`, `productId=${product.productId}`]
+
+    try {
+      const cartResponse = await databases.listDocuments(
+        import.meta.env.VITE_DATABASE_ID, // Replace with your cart database ID
+        "676e4a63000efb5da228", // Replace with your cart collection ID
+        [
+          Query.equal("userId", user.$id),
+          Query.equal("productId", product.$id)
+        ]
+      );
+
+      if (cartResponse.documents.length > 0) {
+        await databases.deleteDocument(
+          import.meta.env.VITE_DATABASE_ID,
+          "676e4a63000efb5da228",
+          cartResponse.documents[0].$id
         );
-  
-        if (cartResponse.documents.length > 0) {
-          await databases.deleteDocument(
-            "675bcd71002a456f4295",
-            "676e4a63000efb5da228",
-            cartResponse.documents[0].$id
-          );
-        }
-      } catch (error) {
-        console.error("Error removing item from cart:", error.message);
+        setIsInCart(false);
       }
-      setIsInCart(false);
-    } else {
-      await addToCart(user.$id, product.productId, "676e4a63000efb5da228"); // Call addToCart
-      setIsInCart(true);
+    } catch (error) {
+      console.error("Error removing from cart:", error.message);
     }
   };
-  
+
+  const handleCartToggle = async () => {
+    if (isInCart) {
+      await removeFromCart();
+    } else {
+      await addToCart();
+    }
+  };
 
   if (!product || loading) return <div>Loading...</div>;
 

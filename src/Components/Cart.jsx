@@ -6,7 +6,7 @@ import { useCart } from "../utils/CartContext"; // Import CartContext
 
 // Initialize Appwrite client
 const client = new Client();
-client.setEndpoint("https://cloud.appwrite.io/v1").setProject("6746052c001ebc1e13ec");
+client.setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT).setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID);
 const databases = new Databases(client);
 
 const Cart = () => {
@@ -24,7 +24,7 @@ const Cart = () => {
 
         // Query cart items for the logged-in user
         const cartResponse = await databases.listDocuments(
-          "675bcd71002a456f4295", // Database ID
+          import.meta.env.VITE_DATABASE_ID, // Database ID
           "676e4a63000efb5da228", // Cart Collection ID
           [Query.equal("userId", user.$id)] // Match userId from context
         );
@@ -33,7 +33,7 @@ const Cart = () => {
         for (const cartItem of cartResponse.documents) {
           try {
             const productResponse = await databases.getDocument(
-              "675bcd71002a456f4295", // Database ID
+              import.meta.env.VITE_DATABASE_ID, // Database ID
               cartItem.collectionId, // Collection ID from the cart document
               cartItem.productId // Product ID from the cart document
             );
@@ -104,7 +104,7 @@ const Cart = () => {
     try {
       // Update the quantity in the cart database document
       await databases.updateDocument(
-        "675bcd71002a456f4295", // Database ID
+        import.meta.env.VITE_DATABASE_ID, // Database ID
         "676e4a63000efb5da228", // Cart Collection ID
         documentId, // Document ID
         { quantity: newQuantity } // New quantity
@@ -123,7 +123,7 @@ const Cart = () => {
       );
       // Also remove the item from the database
       await databases.deleteDocument(
-        "675bcd71002a456f4295", // Database ID
+        import.meta.env.VITE_DATABASE_ID, // Database ID
         "676e4a63000efb5da228", // Cart Collection ID
         item.documentId // Document ID to delete
       );

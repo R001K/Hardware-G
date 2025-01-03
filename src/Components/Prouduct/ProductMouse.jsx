@@ -29,7 +29,7 @@ const ProductMouse = () => {
 
   return (
     <div className="bg-white p-6">
-  <h1 className="text-3xl font-bold mb-6">Mice</h1>
+  <h1 className="text-3xl font-bold mb-6">Mouse</h1>
   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
     {products.map((product) => (
       <Link to={`/product/${product.$id}`} key={product.$id}>

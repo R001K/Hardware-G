@@ -29,7 +29,7 @@ const ProductMonitor = () => {
 
   return (
     <div className="bg-white p-6">
-      <h1 className="text-3xl font-bold mb-6">Cases</h1>
+      <h1 className="text-3xl font-bold mb-6">Monitor</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
         {cases.map((monitoritem) => (
           <Link to={`/Monitor/${monitoritem.$id}`} key={monitoritem.$id}>

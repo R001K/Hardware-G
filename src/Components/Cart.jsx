@@ -160,7 +160,7 @@ const Cart = () => {
               <li key={item.documentId} className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <img
-                    src={item.image || "https://via.placeholder.com/150"}
+                    src={item.imgUrl || "https://via.placeholder.com/150"}
                     alt={item.name}
                     className="w-16 h-16 object-cover rounded"
                   />
